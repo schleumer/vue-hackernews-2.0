@@ -1,4 +1,4 @@
-<template src="./ItemList.pug" lang="pug" />
+<template src="./ItemList.pug" lang="pug"/>
 
 <script>
 import Spinner from './Spinner.vue'
@@ -45,9 +45,9 @@ export default {
   },
 
   beforeMount () {
-    if (this.$root._isMounted) {
-      this.loadItems(this.page)
-    }
+    // if data is already fetched on server-side, just ignore.
+    if(!this.$store.state.fetched || this.$root._isMounted)
+        this.loadItems(this.page)
 
     // watch the current list for realtime updates
     this.unwatchList = watchList(this.type, ids => {
@@ -56,6 +56,10 @@ export default {
         this.displayedItems = this.$store.getters.activeItems
       })
     })
+  },
+
+  mounted() {
+
   },
 
   beforeDestroy () {
@@ -86,5 +90,7 @@ export default {
     }
   }
 }
+
+
 
 </script>

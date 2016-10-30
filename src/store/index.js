@@ -8,6 +8,8 @@ const store = new Vuex.Store({
   state: {
     activeType: null,
     itemsPerPage: 20,
+    isLoading: false,
+    fetched: false,
     items: {/* [id: number]: Item */},
     users: {/* [id: string]: User */},
     lists: {
@@ -23,9 +25,12 @@ const store = new Vuex.Store({
     // ensure data for rendering given list type
     FETCH_LIST_DATA: ({ commit, dispatch, state }, { type }) => {
       commit('SET_ACTIVE_TYPE', { type })
+      commit('SET_LOADING', { value: true })
+
       return fetchIdsByType(type)
         .then(ids => commit('SET_LIST', { type, ids }))
         .then(() => dispatch('ENSURE_ACTIVE_ITEMS'))
+        .then(() => commit('SET_LOADING', { value: false }))
     },
 
     // ensure all active items are fetched
@@ -67,10 +72,16 @@ const store = new Vuex.Store({
           Vue.set(state.items, item.id, item)
         }
       })
+
+      state.isLoading = false
     },
 
     SET_USER: (state, { user }) => {
       Vue.set(state.users, user.id, user)
+    },
+
+    SET_LOADING: (state, { value }) => {
+      state.isLoading = value;
     }
   },
 

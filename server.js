@@ -38,7 +38,7 @@ if (isProd) {
   })
 }
 
-function createRenderer (bundle) {
+function createRenderer(bundle) {
   return createBundleRenderer(bundle, {
     cache: require('lru-cache')({
       max: 1000,
@@ -47,11 +47,15 @@ function createRenderer (bundle) {
   })
 }
 
-app.use(compression({threshold: 0}))
+app.use(compression({ threshold: 0 }))
 app.use('/dist', express.static(resolve('./dist')))
 app.use(favicon(resolve('./src/assets/logo.png')))
 
 app.get('*', (req, res) => {
+  if (req.query[ 'no-state' ]) {
+    return res.end(html.head + `<div id="app"></div>` + html.tail);
+  }
+
   if (!renderer) {
     return res.end('waiting for compilation... refresh in a moment.')
   }
@@ -66,10 +70,11 @@ app.get('*', (req, res) => {
       res.write(html.head)
       // embed initial store state
       if (context.initialState) {
+        context.initialState.fetched = true;
         res.write(
           `<script>window.__INITIAL_STATE__=${
             serialize(context.initialState, { isJSON: true })
-          }</script>`
+            }</script>`
         )
       }
       firstChunk = false
