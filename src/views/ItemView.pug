@@ -1,0 +1,20 @@
+.item-view(v-if='item')
+    spinner(:show='!item')
+
+    template(v-if='item')
+        .item-view-header
+
+            a(:href='item.url', target='_blank')
+                h1 {{ item.title }}
+
+            span.host(v-if='item.url') ({{ item.url | host }})
+
+            p.meta
+                | {{ item.score }} points | by
+                router-link(:to="'/user/' + item.by")
+                | {{ item.by }}
+                | {{ item.time | timeAgo }} ago
+        .item-view-comments
+            p.item-view-comments-header  {{ item.kids ? item.descendants + ' comments' : 'No comments yet.' }}
+            ul.comment-children(v-if='item.kids')
+                comment(v-for='id in item.kids', :id='id')

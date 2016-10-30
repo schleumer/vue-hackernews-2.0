@@ -1,0 +1,13 @@
+li.comment(v-if='comment')
+    .by
+        router-link(:to="'/user/' + comment.by") {{ comment.by }}
+        | {{ comment.time | timeAgo }} ago
+
+        span(v-if='comment.kids && comment.kids.length')
+            | |
+            a.expand(@click='open = !open') {{ (open ? 'collapse' : 'expand') + pluralize(comment.kids.length) }}
+
+    .text(v-html='comment.text')
+
+    ul.comment-children(v-show='open')
+        comment(v-for='id in comment.kids', :id='id')

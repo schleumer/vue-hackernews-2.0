@@ -6,12 +6,13 @@ module.exports = {
   devtool: '#source-map',
   entry: {
     app: './src/client-entry.js',
+    style: './src/styles/app.scss',
     vendor: ['vue', 'vue-router', 'vuex', 'firebase', 'lru-cache', 'es6-promise']
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
     publicPath: '/dist/',
-    filename: 'client-bundle.js'
+    filename: '[name]-bundle.js'
   },
   module: {
     rules: [
@@ -23,6 +24,11 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel',
+        exclude: /node_modules/
+      },
+      {
+        test: /\.scss$/,
+        loaders: ["style", "css?-url&-import", "sass"],
         exclude: /node_modules/
       },
       {

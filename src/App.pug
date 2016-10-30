@@ -1,0 +1,14 @@
+#app
+    .header
+        .inner
+            router-link(to='/', exact='')
+                img.logo(src='./assets/logo.png', alt='logo')
+            router-link(to='/top') Top
+            router-link(to='/new') New
+            router-link(to='/show') Show
+            router-link(to='/ask') Ask
+            router-link(to='/job') Jobs
+            a.github(href='https://github.com/vuejs/vue-hackernews-2.0', target='_blank') Built with Vue.js
+
+    transition(name='fade', mode='out-in')
+        router-view.view

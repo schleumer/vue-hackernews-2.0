@@ -1,0 +1,18 @@
+li.news-item.space-4
+    span.score {{ item.score }}
+    span.title.space-4
+        template(v-if='item.url')
+            a(:href='item.url', target='_blank') {{ item.title }}
+            span.host ({{ item.url | host }})
+        template(v-else='')
+            router-link(:to="'/item/' + item.id") {{ item.title }}
+    br
+    span.meta.space-3
+        span.space-3.by(v-if="item.type !== 'job'")
+            span by
+            router-link(:to="'/user/' + item.by") {{ item.by }}
+        span.time {{ item.time | timeAgo }} ago
+        span.comments-link.space-3(v-if="item.type !== 'job'")
+            span |
+            router-link(:to="'/item/' + item.id") {{ item.descendants }} comments
+    span.label(v-if="item.type !== 'story'") {{ item.type }}

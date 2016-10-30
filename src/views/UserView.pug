@@ -1,0 +1,21 @@
+.user-view
+    spinner(:show='!user')
+
+    template(v-if='user')
+        h1 User : {{ user.id }}
+
+        ul.meta
+            li
+                span.label Created:
+                | {{ user.created | timeAgo }} ago
+
+            li
+                span.label Karma:
+                | {{user.karma}}
+
+            li.about(v-if='user.about', v-html='user.about')
+
+        p.links
+            a(:href="'https://news.ycombinator.com/submitted?id=' + user.id") submissions
+            | |
+            a(:href="'https://news.ycombinator.com/threads?id=' + user.id") comments
